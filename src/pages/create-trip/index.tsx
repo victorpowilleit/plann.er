@@ -4,6 +4,7 @@ import {InviteGuestsModal} from "./components/invite-guests-modal.tsx";
 import {ConfirmTripModal} from "./components/confirm-trip-modal.tsx";
 import {DestinationAndDateStep} from "./components/steps/destination-and-date-step.tsx";
 import {InviteGuestsStep} from "./components/steps/invite-guests-step.tsx";
+import {DateRange} from "react-day-picker";
 
 export function CreateTripPage() {
 
@@ -13,6 +14,10 @@ export function CreateTripPage() {
   const [isGuestsModalOpen, setIsGuestsModalOpen] = useState(false);
   const [emailsToInvite, setEmailsToInvite] = useState<string[]>([]);
   const [isConfirmTripModalOpen, setIsConfirmTripModalOpen] = useState(false);
+  const [destination, setDestination] = useState<string>('');
+  const [ownerName, setOwnerName] = useState<string>('');
+  const [ownerEmail, setOwnerEmail] = useState<string>('');
+  const [eventStartAndEndDates, setEventStartAndEndDates] = useState<DateRange | undefined>(undefined);
 
   function openGuestInput() {
     setIsGuestInputOpen(true);
@@ -68,10 +73,18 @@ export function CreateTripPage() {
 
         <div className="space-y-4">
 
-          <DestinationAndDateStep isGuestInputOpen={isGuestInputOpen} closeGuestInput={closeGuestInput} openGuestInput={openGuestInput}/>
+          <DestinationAndDateStep
+            isGuestInputOpen={isGuestInputOpen}
+            closeGuestInput={closeGuestInput}
+            openGuestInput={openGuestInput}
+            setDestination={setDestination}
+            eventStartAndEndDates={eventStartAndEndDates}
+            setEventStartAndEndDates={setEventStartAndEndDates}
+          />
 
           {isGuestInputOpen && (
-            <InviteGuestsStep emailsToInvite={emailsToInvite} openConfirmTripModal={openConfirmTripModal} openGuestsModal={openGuestsModal}/>
+            <InviteGuestsStep emailsToInvite={emailsToInvite} openConfirmTripModal={openConfirmTripModal}
+                              openGuestsModal={openGuestsModal}/>
           )}
 
         </div>
@@ -82,11 +95,17 @@ export function CreateTripPage() {
       </div>
 
       {isGuestsModalOpen && (
-        <InviteGuestsModal emailsToInvite={emailsToInvite} addNewEmailToInvite={addNewEmailToInvite} removeEmailFromInvites={removeEmailFromInvites} closeGuestsModal={closeGuestsModal} />
+        <InviteGuestsModal emailsToInvite={emailsToInvite} addNewEmailToInvite={addNewEmailToInvite}
+                           removeEmailFromInvites={removeEmailFromInvites} closeGuestsModal={closeGuestsModal}/>
       )}
 
       {isConfirmTripModalOpen && (
-        <ConfirmTripModal closeConfirmTripModal={closeConfirmTripModal} createTrip={createTrip}/>
+        <ConfirmTripModal
+          closeConfirmTripModal={closeConfirmTripModal}
+          createTrip={createTrip}
+          setOwerName={setOwnerName}
+          setOwnerEmail={setOwnerEmail}
+        />
       )}
 
     </div>

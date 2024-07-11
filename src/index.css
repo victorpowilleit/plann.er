@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+/*CALENDAR COLORS*/
+.rdp{
+    --rdp-cell-size: 40px; /* Size of the day cells. */
+    --rdp-caption-font-size: 18px; /* Font size for the caption labels. */
+    --rdp-accent-color: #BEF264; /* Accent color for the background of selected days. */
+    --rdp-background-color: #6a8538; /* Background color for the hovered/focused elements. */
+    --rdp-accent-color-dark: #3003e1; /* Accent color for the background of selected days (to use in dark-mode). */
+    --rdp-background-color-dark: #180270; /* Background color for the hovered/focused elements (to use in dark-mode). */
+    --rdp-outline: 2px solid var(--rdp-accent-color); /* Outline border for focused elements */
+    --rdp-outline-selected: 3px solid var(--rdp-accent-color); /* Outline border for focused _and_ selected elements */
+    --rdp-selected-color: #000; /* Color of selected day text */
+}
+
+[data-theme="dark"] .rdp, .dark .rdp {
+    --rdp-accent-color: #BEF264;
+    --rdp-background-color: #BEF264;
+}
+
 *{
     min-width: 0;
 }
