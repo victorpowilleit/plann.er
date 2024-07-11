@@ -97,7 +97,7 @@ export function CreateActivityModal(
                             }}
                         />
                         <div className='w-full flex justify-center text-2xl'>
-                            <input className="bg-transparent" type="time" onChange={e=>setTime(e.target.value)}/>
+                            <input className="bg-transparent" type="time" value={time} onChange={e=>setTime(e.target.value)}/>
                         </div>
                     </div>
                 </div>
