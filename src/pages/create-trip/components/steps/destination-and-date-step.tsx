@@ -34,7 +34,9 @@ export function DestinationAndDateStep({
 
   const from = eventStartAndEndDates?.from ? format(eventStartAndEndDates.from, "d' de 'LLL", {locale: ptBR}) : null
   const to = eventStartAndEndDates?.to ? format(eventStartAndEndDates.to, "d' de 'LLL", {locale: ptBR}) : null
-  const displayedDate = eventStartAndEndDates?.from ? eventStartAndEndDates.to ? `${from} a ${to}` : from : null
+  const displayedDate = eventStartAndEndDates?.from ?
+    eventStartAndEndDates.to && eventStartAndEndDates.to !== eventStartAndEndDates.from ?
+      `${from} a ${to}` : from : null
 
   return (
     <div className="h-16 bg-zinc-900 px-4 rounded-xl flex items-center shadow-shape gap-3">
