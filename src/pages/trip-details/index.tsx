@@ -27,16 +27,14 @@ export function TripDetailsPage() {
   }, [tripId]);
 
 
-  async function createActivity(e:FormEvent<HTMLFormElement>):Promise<void>{
-    e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const title = data.get('title')?.toString()
-    const occursAt = data.get('occursAt')?.toString()
+  async function createActivity({event, title, date}:{event:FormEvent<HTMLFormElement>, title:string|null, date:Date}):Promise<void>{
+    event.preventDefault();
+    const occursAt = date
     if(title&&occursAt) {
       const newActivitiesList = [...tripData.activities||[], {title, occursAt}]
       const response = await dbUpdateTrip(tripId!, {activities: newActivitiesList})
       if(response){
-        setTripData({...tripData, activities: newActivitiesList})
+        getData(tripId!).then()
         closeCreateActivityModal()
       }
     }
@@ -89,7 +87,7 @@ export function TripDetailsPage() {
 
       {/*MODAL*/}
       {isCreateActivityModalOpen && (
-        <CreateActivityModal closeCreateActivityModal={closeCreateActivityModal} tripId={tripId!} createActivity={createActivity}/>
+        <CreateActivityModal closeCreateActivityModal={closeCreateActivityModal} tripId={tripId!} createActivity={createActivity} dateRange={tripData.eventStartAndEndDates}/>
       )}
 
     </div>

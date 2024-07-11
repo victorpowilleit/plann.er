@@ -20,10 +20,10 @@ export type DocDataType = DocumentData
 export async function dbCreateTrip(tripData: TripDataType): Promise<string | null> {
   try {
     const docRef = await addDoc(collection(db, `trips/`), tripData);
-    console.log("Document written with ID: ", docRef.id);
+    // console.log("Document written with ID: ", docRef.id);
     return docRef.id
   } catch (e) {
-    console.error("Error adding document: ", e);
+    // console.error("Error adding document: ", e);
     return null;
   }
 }
@@ -45,20 +45,20 @@ export async function dbRead(tripId: string) {
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
-    console.log(docSnap.id, " => ", docSnap.data());
+    // console.log(docSnap.id, " => ", docSnap.data());
     return docSnap.data()
   } else {
-    console.log("Error getting document!");
+    // console.log("Error getting document!");
   }
 }
 
 export async function dbUpdateTrip(tripId: string, data: TripDataType): Promise<boolean> {
   try {
-    const docRef = doc(db, "trips", tripId);
+    // const docRef = doc(db, "trips", tripId);
     await updateDoc(docRef, data);
     return true
   } catch (e) {
-    console.error("Error updating document: ", e);
+    // console.error("Error updating document: ", e);
     return false
   }
 }
