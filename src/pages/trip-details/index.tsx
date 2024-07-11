@@ -1,16 +1,46 @@
 import {
   Plus,
 } from "lucide-react";
-import {useState} from "react";
+import {FormEvent, useEffect, useState} from "react";
 import {CreateActivityModal} from "./components/create-activity-modal.tsx";
 import {ImportantLinks} from "./components/important-links.tsx";
 import {Guests} from "./components/guests.tsx";
 import {Activities} from "./components/activities.tsx";
 import {DestinationAndDateHeader} from "./components/destination-and-date-header.tsx";
+import {dbRead, dbUpdateTrip, DocDataType} from "../../db/functions/CRUD.ts";
+import {useParams} from "react-router-dom";
 
 export function TripDetailsPage() {
 
   const [isCreateActivityModalOpen, setCreateActivityModalOpen] = useState(false);
+  const [tripData, setTripData] = useState<DocDataType | null>(null);
+
+  const {tripId} = useParams();
+
+  async function getData(id: string): Promise<void> {
+    const data: DocDataType | undefined = await dbRead(id)
+    setTripData(data)
+  }
+
+  useEffect(() => {
+    getData(tripId!).then()
+  }, [tripId]);
+
+
+  async function createActivity(e:FormEvent<HTMLFormElement>):Promise<void>{
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    const title = data.get('title')?.toString()
+    const occursAt = data.get('occursAt')?.toString()
+    if(title&&occursAt) {
+      const newActivitiesList = [...tripData.activities||[], {title, occursAt}]
+      const response = await dbUpdateTrip(tripId!, {activities: newActivitiesList})
+      if(response){
+        setTripData({...tripData, activities: newActivitiesList})
+        closeCreateActivityModal()
+      }
+    }
+  }
 
   function openCreateActivityModal() {
     setCreateActivityModalOpen(true);
@@ -24,7 +54,7 @@ export function TripDetailsPage() {
     <div className="max-w-6xl px-6 py-10 mx-auto space-y-8">
 
       {/*HEADER*/}
-      <DestinationAndDateHeader />
+      <DestinationAndDateHeader tripData={tripData}/>
 
       {/*CONTENT*/}
       <main className="flex gap-16 px-4">
@@ -43,7 +73,7 @@ export function TripDetailsPage() {
           </div>
 
           {/*DATES LIST*/}
-          <Activities/>
+          <Activities activitiesList={tripData?.activities}/>
 
         </div>
 
@@ -52,14 +82,14 @@ export function TripDetailsPage() {
           <ImportantLinks/>
           {/*SEPARATOR*/}
           <div className="w-full h-px bg-zinc-800"/>
-          <Guests/>
+          <Guests tripData={tripData}/>
 
         </div>
       </main>
 
       {/*MODAL*/}
       {isCreateActivityModalOpen && (
-        <CreateActivityModal closeCreateActivityModal={closeCreateActivityModal}/>
+        <CreateActivityModal closeCreateActivityModal={closeCreateActivityModal} tripId={tripId!} createActivity={createActivity}/>
       )}
 
     </div>

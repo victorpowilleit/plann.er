@@ -3,7 +3,7 @@ import {Button} from "../../../../components/button.tsx";
 import {useState} from "react";
 import {DateRange, DayPicker} from "react-day-picker";
 import {format} from "date-fns";
-import {es} from "date-fns/locale";
+import {ptBR} from "date-fns/locale";
 
 interface DestinationAndDateStepProps {
   isGuestInputOpen: boolean
@@ -32,8 +32,8 @@ export function DestinationAndDateStep({
     setIsDatePickerOpen(false);
   }
 
-  const from = eventStartAndEndDates?.from ? format(eventStartAndEndDates.from, "d' de 'LLL", {locale: es}) : null
-  const to = eventStartAndEndDates?.to ? format(eventStartAndEndDates.to, "d' de 'LLL", {locale: es}) : null
+  const from = eventStartAndEndDates?.from ? format(eventStartAndEndDates.from, "d' de 'LLL", {locale: ptBR}) : null
+  const to = eventStartAndEndDates?.to ? format(eventStartAndEndDates.to, "d' de 'LLL", {locale: ptBR}) : null
   const displayedDate = eventStartAndEndDates?.from ? eventStartAndEndDates.to ? `${from} a ${to}` : from : null
 
   return (
@@ -70,7 +70,7 @@ export function DestinationAndDateStep({
                   </div>
                   <DayPicker
                       mode="range"
-                      locale={es}
+                      locale={ptBR}
                       selected={eventStartAndEndDates}
                       onSelect={setEventStartAndEndDates}
                   />

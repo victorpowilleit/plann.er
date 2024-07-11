@@ -5,6 +5,7 @@ import {ConfirmTripModal} from "./components/confirm-trip-modal.tsx";
 import {DestinationAndDateStep} from "./components/steps/destination-and-date-step.tsx";
 import {InviteGuestsStep} from "./components/steps/invite-guests-step.tsx";
 import {DateRange} from "react-day-picker";
+import {dbCreateTrip} from "../../db/functions/CRUD.ts";
 
 export function CreateTripPage() {
 
@@ -58,9 +59,20 @@ export function CreateTripPage() {
     setEmailsToInvite(prevState => prevState.filter(email => email !== emailToRemove))
   }
 
-  function createTrip(e: FormEvent<HTMLFormElement>) {
+  async function createTrip(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    navigate('/trips/123')
+    if(ownerName.length >0 && ownerEmail.length > 0 && destination.length >0 && ownerEmail.length > 0 && eventStartAndEndDates) {
+      const tripId = await dbCreateTrip({
+        ownerName,
+        ownerEmail,
+        invited: [{name: ownerName, email: ownerEmail, isConfirmed: true},...emailsToInvite.map(mail=>{return{ name:'...', email:mail, isConfirmed: false }})],
+        destination,
+        eventStartAndEndDates
+      })
+      if(tripId){
+        navigate(`/trips/${tripId}`)
+      }
+    }
   }
 
   return (
@@ -103,7 +115,7 @@ export function CreateTripPage() {
         <ConfirmTripModal
           closeConfirmTripModal={closeConfirmTripModal}
           createTrip={createTrip}
-          setOwerName={setOwnerName}
+          setOwnerName={setOwnerName}
           setOwnerEmail={setOwnerEmail}
         />
       )}

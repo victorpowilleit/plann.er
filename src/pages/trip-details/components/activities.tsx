@@ -1,43 +1,47 @@
-import {CircleCheck} from "lucide-react";
+import {Activity} from "./activity.tsx";
+import {format, parseISO} from "date-fns";
+import {ptBR} from "date-fns/locale";
 
-export function Activities(){
+interface ActivitiesProps {
+  activitiesList: { title: string, occursAt: string }[]
+}
+
+export function Activities({activitiesList = []}: ActivitiesProps) {
+
+  const activitiesListSorted = activitiesList?.map(activity => {
+    return {...activity, occursAt: parseISO(activity.occursAt)}
+  }).
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    sort((a, b) => a.occursAt - b.occursAt);
+
+  const activityByDate:{[key:string]:{title:string, occursAt:Date}[]} = {}
+  activitiesListSorted.forEach(activity => {
+    const key = `0${activity.occursAt.getDate()}`.slice(-2) + "_" + `0${activity.occursAt.getMonth() + 1}`.slice(-2)
+    activityByDate[key] ? activityByDate[key].push(activity) : activityByDate[key] = [activity]
+  })
+  console.log(activityByDate)
+
+
   return (
     <div className="space-y-8">
 
       {/*DATE*/}
-      <div className="space-y-2.5">
-        <div className="flex gap-2 items-baseline">
-          <span className="text-xl text-zinc-300 font-semibold">Dia 17</span>
-          <span className="text-xs text-zinc-500">Sábado</span>
-        </div>
-        <p className="text-zinc-500 text-sm">
-          Nenhuma atividade cadastrada nessa data.
-        </p>
-      </div>
-
-      {/*DATE*/}
-      <div className="space-y-2.5">
-        <div className="flex gap-2 items-baseline">
-          <span className="text-xl text-zinc-300 font-semibold">Dia 18</span>
-          <span className="text-xs text-zinc-500">Domingo</span>
-        </div>
-        {/*ACTIVITY LIST*/}
-        <div className="space-y-2.5">
-          {/*ACTIVITY*/}
-          <div className="px-4 py-2.5 bg-zinc-900 rounded-xl shadow-shape flex items-center gap-3">
-            <CircleCheck className="size-5 text-lime-300"/>
-            <span className="text-zinc-100">Academia em grupo</span>
-            <span className="text-zinc-400 text-sm ml-auto">08:00h</span>
+      {activitiesList.length > 0 ?
+      Object.keys(activityByDate).map(day => (
+        <div key={day} className="space-y-2.5">
+          <div className="flex gap-2 items-baseline">
+            <span className="text-xl text-zinc-300 font-semibold">Dia {day.slice(0,2)}</span>
+            <span className="text-xs text-zinc-500 capitalize">{format(activityByDate[day][0].occursAt, 'EEEE', {locale: ptBR})}</span>
           </div>
-          {/*ACTIVITY*/}
-          <div className="px-4 py-2.5 bg-zinc-900 rounded-xl shadow-shape flex items-center gap-3">
-            <CircleCheck className="size-5 text-lime-300"/>
-            <span className="text-zinc-100">Academia em grupo</span>
-            <span className="text-zinc-400 text-sm ml-auto">08:00h</span>
+          <div className="space-y-2.5">
+            {activityByDate[day].map(activity => <Activity key={activity.title+activity.occursAt} title={activity.title} occursAt={activity.occursAt}/>)}
           </div>
-
         </div>
-      </div>
+      ))
+        :
+        <p className="text-zinc-500 text-sm">Nenhuma atividade cadastrada.</p>
+      }
 
     </div>
   )

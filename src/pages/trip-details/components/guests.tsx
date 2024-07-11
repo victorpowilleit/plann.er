@@ -1,7 +1,9 @@
-import {CircleDashed, UserCog} from "lucide-react";
+import {UserCog} from "lucide-react";
 import {Button} from "../../../components/button.tsx";
+import {DocDataType} from "../../../db/functions/CRUD.ts";
+import {Guest} from "./guest.tsx";
 
-export function Guests(){
+export function Guests({tripData}:{tripData:DocDataType}){
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Convidados</h2>
@@ -10,15 +12,7 @@ export function Guests(){
       <div className="space-y-5">
 
         {/*GUEST*/}
-        <div className="flex items-center justify-between gap-4">
-          <div className="space-y-1.5">
-            <span className="block font-medium text-zinc-100">Jessica White</span>
-            <a href="#" className="block text-sm text-zinc-400 truncate">
-              jessica.white44@gmail.com
-            </a>
-          </div>
-          <CircleDashed className="text-zinc-400 size-5 shrink-0"/>
-        </div>
+        {tripData?.invited.map((guest: { name: string; email: string; isConfirmed: boolean; }, i:number) => <Guest key={guest.email} name={guest.name||`Convidado ${i}`} email={guest.email} isConfirmed={guest.isConfirmed}/>)}
 
       </div>
 
