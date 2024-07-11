@@ -23,7 +23,7 @@ export function InviteGuestsModal({emailsToInvite, addNewEmailToInvite, removeEm
             </button>
           </div>
           <p className="text-sm text-zinc-400">
-            Os convidados irão receber e-mails para confirmar a paryicipação na viagem.
+            Os convidados irão receber e-mails para confirmar a participação na viagem.
           </p>
 
         </div>

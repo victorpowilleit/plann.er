@@ -73,6 +73,9 @@ export function DestinationAndDateStep({
                       locale={ptBR}
                       selected={eventStartAndEndDates}
                       onSelect={setEventStartAndEndDates}
+                      disabled={{
+                        before: new Date()
+                      }}
                   />
               </div>
           </div>
