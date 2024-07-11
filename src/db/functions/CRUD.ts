@@ -54,7 +54,7 @@ export async function dbRead(tripId: string) {
 
 export async function dbUpdateTrip(tripId: string, data: TripDataType): Promise<boolean> {
   try {
-    // const docRef = doc(db, "trips", tripId);
+    const docRef = doc(db, "trips", tripId);
     await updateDoc(docRef, data);
     return true
   } catch (e) {
